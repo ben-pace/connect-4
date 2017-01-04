@@ -28,54 +28,54 @@ def make_move(player, current_board):
 
 	open = check_column(move)
 
-	if open == 7:
+	if open == -1:
 		print("That column is full! Pick another column.")
 		return make_move(player, current_board)
 	else:
 		board[open][move] = colour
-		if win_condition(board, open, move):
+		if win_condition(board):
 			print("Player %s has won! Congratulations!" % (player + 1))
 		else:
 			return make_move(1 - player, current_board)
 
 # Finds the row (counting up from the bottom) that is open
-# and returns 7 if it's full
+# and returns -1 if it's full
 def check_column(column):
-	open = 0
-	while board[open][column] != "O":
-		open += 1
+	open = 5
+	while board[5 - open][column] != "O":
+		open -= 1
 	return open
 
-# Takes in a board, and also the position of the most recent move
-# Then checks if the game is over
-def win_condition(board, p1, p2):
-	colour = board[p1][p2]
-	up_down = check_direction(board, colour, 1, 0, p1, p2)
-	right_left = check_direction(board, colour, 0, 1, p1, p2) 
-	up_right = check_direction(board, colour, 1, 1, p1, p2)
-	up_left = check_direction(board, colour, 1, -1, p1, p2)
-	if up_down >= 3 or right_left >= 3 or up_right >= 3 or up_left >= 3:
-		return True
-	else:
-		return False
+# Takes in a board and checks if the game is over
+def win_condition(board):
+	win = False
+	for x in range(6):
+		for y in range(7):
+			win = check_win_here(board, x, y)
+			if win:
+				break
+		if win:
+			break
+	return win
 
-# Takes in the board, the colour to check,
-# and then whether to go up/down, and left/right
-# and outputs the number of consecutives of that colour
-# in the specified directions
-def check_direction(board, colour, up_down, right_left, p1, p2):
-	out = 0
-	for x in range(3):
-		if board[p1 + up_down*x][p2 + right_left*x] == colour:
-			out += 1
-		else:
+
+# Checks in every direction, whether you're the start of a run of 4
+def check_win_here(board, row, col):
+	win = False
+	directions = [(1,0), (1,1), (0,1), (-1,1), (-1,0), (-1,-1), (0,-1), (1,-1)]
+	tile = board[row][col]
+	for direction in directions:
+		for y in range(3):
+			if row + y*direction[0] >= 0 and row + y*direction[0] <= 5 and col + y*direction[1] >= 0 and col + y*direction[1] <= 6:
+				if board[row + y*direction[0]][col + y*direction[1]] != tile:
+					break
+			else:
+				win = True
+		if win:
 			break
-	for x in range(3):
-		if board[p1 - up_down*x][p2 - right_left*x] == colour:
-			out += 1
-		else:
-			break
-	return out
+	return win
+
+
 
 make_move(0, board)
 
