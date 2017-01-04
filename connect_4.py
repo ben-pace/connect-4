@@ -80,3 +80,5 @@ def check_direction(board, colour, up_down, right_left, p1, p2):
 		else:
 			break
 	return out
+
+make_move()
