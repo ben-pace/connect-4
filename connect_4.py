@@ -7,10 +7,6 @@ for x in range (6):
 	for y in range (7):
 		row.append("O")
 	board.append(row)
-
-# Variable keeps track of whose turn, 0 or 1
-player = 0
-turn = 1
 	
 ### Displays the current board
 def display_board(input):
@@ -18,7 +14,9 @@ def display_board(input):
 		print(" ".join(each_row))
 
 ### Takes in a column, makes the move
-def make_move():
+def make_move(player, current_board):
+
+	display_board(current_board)
 
 	colour = ''
 	if player == 0:
@@ -26,21 +24,19 @@ def make_move():
 	else:
 		colour = "B"
 
-	move = int(raw_input("Which column? "))
+	move = int(input("Which column? "))
 
 	open = check_column(move)
 
 	if open == 7:
 		print("That column is full! Pick another column.")
-		return make_move()
+		return make_move(player, current_board)
 	else:
-		board[open][column] = colour
-		if win_condition(board, open, column):
+		board[open][move] = colour
+		if win_condition(board, open, move):
 			print("Player %s has won! Congratulations!" % (player + 1))
 		else:
-			player = 1 - player
-			turn += 1
-			return make_move()
+			return make_move(1 - player, current_board)
 
 # Finds the row (counting up from the bottom) that is open
 # and returns 7 if it's full
@@ -70,15 +66,16 @@ def win_condition(board, p1, p2):
 def check_direction(board, colour, up_down, right_left, p1, p2):
 	out = 0
 	for x in range(3):
-		if board[p1 + up_down*x][p2 + right_left*x] == player:
+		if board[p1 + up_down*x][p2 + right_left*x] == colour:
 			out += 1
 		else:
 			break
 	for x in range(3):
-		if board[p1 - up_down*x][p2 - right_left*x] == player:
+		if board[p1 - up_down*x][p2 - right_left*x] == colour:
 			out += 1
 		else:
 			break
 	return out
 
-make_move()
+make_move(0, board)
+
