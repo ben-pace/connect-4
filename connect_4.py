@@ -14,7 +14,11 @@ def display_board(input):
 		print(" ".join(each_row))
 
 ### Takes in a column, makes the move
-def make_move(player, current_board):
+def make_move(current_board, player, turn):
+
+	if turn == 43:
+		print("Game over!")
+		return
 
 	display_board(current_board)
 
@@ -30,14 +34,14 @@ def make_move(player, current_board):
 
 	if open == -1:
 		print("That column is full! Pick another column.")
-		make_move(player, current_board)
+		make_move(current_board, player, turn)
 	else:
 		current_board[open][move] = colour
 		if win_condition(current_board, colour):
 			display_board(current_board)
 			print("Player %s has won! Congratulations!" % (player + 1))
 		else:
-			make_move(1 - player, current_board)
+			make_move(current_board, 1 - player, (turn + 1))
 
 # Finds the row (counting up from the bottom) that is open
 # and returns -1 if it's full
@@ -84,5 +88,5 @@ def check_win_here(board, row, col, tile):
 			break
 	return win
 
-make_move(0, board)
+make_move(board, 0, 1)
 
