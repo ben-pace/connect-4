@@ -28,7 +28,12 @@ def make_move(current_board, player, turn):
 	else:
 		colour = "B"
 
-	move = int(input("Which column? "))
+	# Code to get the player's input
+	entry = ''
+	while not (entry in ['1', '2', '3', '4', '5', '6', '7']):
+		entry = input("Which column? ")
+	move = int(entry)
+
 
 	open = check_column(move)
 
