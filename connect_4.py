@@ -33,7 +33,7 @@ def make_move(player, current_board):
 		make_move(player, current_board)
 	else:
 		current_board[open][move] = colour
-		if win_condition(current_board):
+		if win_condition(current_board, colour):
 			display_board(current_board)
 			print("Player %s has won! Congratulations!" % (player + 1))
 		else:
@@ -50,11 +50,11 @@ def check_column(column):
 	return open
 
 # Takes in a board and checks if the game is over
-def win_condition(board):
+def win_condition(board, tile):
 	win = False
 	for x in range(6):
 		for y in range(7):
-			win = check_win_here(board, x, y)
+			win = check_win_here(board, x, y, tile)
 			if win:
 				break
 		if win:
@@ -63,31 +63,26 @@ def win_condition(board):
 
 
 # Checks in every direction, whether you're the start of a run of 4
-def check_win_here(board, row, col):
+def check_win_here(board, row, col, tile):
 	win = False
 	directions = [(1,0), (1,1), (0,1), (-1,1), (-1,0), (-1,-1), (0,-1), (1,-1)]
-	tile = board[row][col]
-	for direction in directions:
-		for y in range(3):
+	for d in directions:
+		for r in range(4):
 			# Checks to make sure you're in range
-			if (row + (y+1)*direction[0] >= 0 and 
-				row + (y+1)*direction[0] <= 5 and 
-				col + (y+1)*direction[1] >= 0 and 
-				col + (y+1)*direction[1] <= 6):
+			if (row + r*d[0] >= 0 and 
+				row + r*d[0] <= 5 and 
+				col + r*d[1] >= 0 and 
+				col + r*d[1] <= 6):
 				# Checks if the tile is the wrong colour
-				if board[row + y*direction[0]][col + y*direction[1]] != tile:
-					win = False
+				if board[row + r*d[0]][col + r*d[1]] != tile:
 					break
-				if y == 3:
+				if r == 3:
 					win = True
 			else:
-				win = False
 				break
 		if win:
 			break
 	return win
-
-
 
 make_move(0, board)
 
