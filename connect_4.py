@@ -25,6 +25,8 @@ class Board(object):
 		else:
 			return "out of range"
 
+	# Takes in a board position and colour,
+	# and updates that board position
 	def update_tile(self, row, col, colour):
 		if self.check_tile(row, col) != "out of range":
 			self.board[row][col] = colour
@@ -37,7 +39,7 @@ class Connect_4(object):
 		self.player = 1
 		self.colour = "R"
 
-	### Takes in a column, makes the move
+	### Makes the move
 	def make_move(self):
 
 		# Check that the game is not over
@@ -85,7 +87,7 @@ class Connect_4(object):
 				break
 		return open
 
-	# Takes in a board and checks if the game is over
+	# Checks if the game is won
 	def win_condition(self):
 		win = False
 		for x in range(self.board.rows):
@@ -97,8 +99,9 @@ class Connect_4(object):
 				break
 		return win
 
-
-	# Checks in every direction, whether you're the start of a run of 4
+	# Checks (in every direction) 
+	# whether a given position is 
+	# the start of a run of 4
 	def check_win_here(self, row, col):
 		win = False
 		directions = [(1,0), (1,1), (0,1), (-1,1), (-1,0), (-1,-1), (0,-1), (1,-1)]
